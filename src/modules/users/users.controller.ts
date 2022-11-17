@@ -8,12 +8,11 @@ import {
   Param,
   Post,
   Put,
-  Req,
 } from '@nestjs/common'
 import { ApiTags, ApiResponse } from '@nestjs/swagger'
 
 import { UsersService } from './users.service'
-import { UserCreateDto } from './dto'
+import { UserCreateDto, UserUpdateDto } from './dto'
 import { T_User } from './models'
 
 import { I_GetData } from 'src/models/app.model'
@@ -49,7 +48,7 @@ export class UsersController {
   })
   getUser(
     @Param('userId') userId: string,
-  ): Promise<I_GetData<{ user: T_User }>> {
+  ): Promise<I_GetData<{ user: Omit<T_User, 'createdAt' | 'updatedAt'> }>> {
     return this.usersService.getUser(Number(userId))
   }
 
@@ -65,7 +64,40 @@ export class UsersController {
   })
   createUser(
     @Body() body: UserCreateDto,
-  ): Promise<I_GetData<{ user: T_User }>> {
+  ): Promise<I_GetData<{ user: Omit<T_User, 'createdAt' | 'updatedAt'> }>> {
     return this.usersService.createUser(body)
+  }
+
+  @Put(':userId')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'User updated successfully',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+  })
+  updateUser(
+    @Param('userId') userId: string,
+    @Body() body: UserUpdateDto,
+  ): Promise<I_GetData<{ user: Omit<T_User, 'createdAt' | 'updatedAt'> }>> {
+    return this.usersService.updateUser(Number(userId), body)
+  }
+
+  @Delete(':userId')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'User deleted successfully',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+  })
+  deleteUser(
+    @Param('userId') userId: string,
+  ): Promise<Omit<I_GetData<unknown>, 'data'>> {
+    return this.usersService.deleteUser(Number(userId))
   }
 }
