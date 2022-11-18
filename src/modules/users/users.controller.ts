@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common'
 import { ApiTags, ApiResponse } from '@nestjs/swagger'
 
-import { UsersService } from './users.service'
 import { UserCreateDto, UserUpdateDto } from './dto'
+import { UsersService } from './users.service'
 import { T_User } from './models'
 
 import { I_GetData } from 'src/models/app.model'

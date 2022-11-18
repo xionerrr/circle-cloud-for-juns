@@ -12,7 +12,6 @@ import { T_User } from './models'
 
 import { User } from 'src/entities/user.entity'
 import { E_ServerStatus, I_GetData } from 'src/models/app.model'
-import { typeReturn } from 'src/utils'
 import { T_UserFindParam, T_UserFindType } from 'src/models/user.model'
 
 @Injectable()
@@ -31,7 +30,7 @@ export class UsersService {
           email: true,
           firstName: true,
           lastName: true,
-          isActive: true,
+          active: true,
         },
       })
 
@@ -71,7 +70,7 @@ export class UsersService {
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
-            isActive: user.isActive,
+            active: user.active,
           },
         },
         timestamp: new Date(),
@@ -109,7 +108,7 @@ export class UsersService {
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
-            isActive: user.isActive,
+            active: user.active,
           },
         },
         timestamp: new Date(),
@@ -148,7 +147,7 @@ export class UsersService {
             email: newData.email,
             firstName: newData.firstName,
             lastName: newData.lastName,
-            isActive: newData.isActive,
+            active: newData.active,
           },
         },
         timestamp: new Date(),

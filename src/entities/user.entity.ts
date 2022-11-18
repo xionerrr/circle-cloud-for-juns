@@ -24,16 +24,16 @@ export class User {
   @Column({ nullable: true })
   hashedRt: string
 
-  @Column()
+  @Column({ nullable: true })
   firstName: string
 
-  @Column()
+  @Column({ nullable: true })
   lastName: string
 
   @Column({
     default: true,
   })
-  isActive: boolean
+  active: boolean
 
   @CreateDateColumn()
   createdAt: Date
