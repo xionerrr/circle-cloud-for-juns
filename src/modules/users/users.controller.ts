@@ -8,8 +8,10 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common'
-import { ApiTags, ApiResponse } from '@nestjs/swagger'
+import { ApiTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger'
+import { AuthGuard } from '@nestjs/passport'
 
 import { UserCreateDto, UserUpdateDto } from './dto'
 import { UsersService } from './users.service'
@@ -17,6 +19,8 @@ import { T_User } from './models'
 
 import { I_GetData } from 'src/models/app.model'
 
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 @Controller('users')
 @ApiTags('Users')
 export class UsersController {

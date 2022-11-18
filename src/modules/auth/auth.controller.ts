@@ -2,7 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 
 import { AuthService } from './auth.service'
-import { SignUpDto } from './dto'
+import { SignInDto, SignUpDto } from './dto'
 import { I_Auth } from './models'
 
 import { I_GetData } from 'src/models/app.model'
@@ -24,5 +24,19 @@ export class AuthController {
   })
   signUp(@Body() body: SignUpDto): Promise<I_GetData<I_Auth>> {
     return this.authService.signUp(body)
+  }
+
+  @Post('sign-in')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Signed in',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+  })
+  signIn(@Body() body: SignInDto): Promise<I_GetData<I_Auth>> {
+    return this.authService.signIn(body)
   }
 }
