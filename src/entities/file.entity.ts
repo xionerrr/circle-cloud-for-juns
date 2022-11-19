@@ -5,7 +5,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 })
 export class File {
   @PrimaryGeneratedColumn()
-  id: number
+  public id: number
 
   @Column()
   fileName: string

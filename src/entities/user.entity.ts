@@ -5,10 +5,14 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm'
 
-import { T_UserId } from 'src/models/user.model'
 import { Task } from './task.entity'
+import { File } from './file.entity'
+
+import { T_UserId } from 'src/models'
 
 @Entity({
   name: 'users',
@@ -36,6 +40,10 @@ export class User {
     default: true,
   })
   active: boolean
+
+  @OneToOne(() => File)
+  @JoinColumn()
+  avatar: File
 
   @OneToMany(() => Task, (task) => task.creator)
   tasks: Task[]

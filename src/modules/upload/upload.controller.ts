@@ -1,5 +1,7 @@
 import {
+  BadRequestException,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -7,6 +9,7 @@ import {
   Post,
   UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import {
@@ -18,6 +21,10 @@ import {
 } from '@nestjs/swagger'
 
 import { UploadService } from './upload.service'
+
+import { File } from 'src/entities'
+import { FilesInterceptor } from 'src/interceptors'
+import { I_GetData } from 'src/models'
 
 @UseGuards(AuthGuard('jwt'))
 @ApiBearerAuth()
@@ -48,8 +55,29 @@ export class UploadController {
     status: HttpStatus.FORBIDDEN,
     description: 'Forbidden',
   })
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    return this.uploadService.uploadFile(file)
+  @UseInterceptors(
+    FilesInterceptor({
+      fieldName: 'file',
+      path: '',
+      fileFilter: (_, file, callback) => {
+        if (!file.mimetype.includes('image')) {
+          return callback(new BadRequestException('Incorrect file type'), false)
+        }
+        callback(null, true)
+      },
+      limits: {
+        fileSize: 2048 ** 2,
+      },
+    }),
+  )
+  uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<I_GetData<File>> {
+    return this.uploadService.uploadFile({
+      url: '/uploads/' + file.filename,
+      fileName: file.originalname,
+      mimetype: file.mimetype,
+    })
   }
 
   @Get('files/:fileId')
@@ -64,5 +92,19 @@ export class UploadController {
   })
   downloadFile(@Param('fileId') fileId: string) {
     return this.uploadService.downloadFile(Number(fileId))
+  }
+
+  @Delete('files/:fileId')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'File deleted',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+  })
+  deleteFile(@Param('fileId') fileId: string) {
+    return this.uploadService.deleteFile(Number(fileId))
   }
 }
