@@ -36,7 +36,9 @@ export class UsersController {
     status: HttpStatus.FORBIDDEN,
     description: 'Forbidden',
   })
-  getUsers(): Promise<I_GetData<{ users: T_User[]; count: number }>> {
+  getUsers(): Promise<
+    I_GetData<{ users: T_User[]; count: number; total: number }>
+  > {
     return this.usersService.getUsers()
   }
 

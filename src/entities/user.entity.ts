@@ -4,9 +4,11 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm'
 
 import { T_UserId } from 'src/models/user.model'
+import { Task } from './task.entity'
 
 @Entity({
   name: 'users',
@@ -34,6 +36,9 @@ export class User {
     default: true,
   })
   active: boolean
+
+  @OneToMany(() => Task, (task) => task.creator)
+  tasks: Task[]
 
   @CreateDateColumn()
   createdAt: Date

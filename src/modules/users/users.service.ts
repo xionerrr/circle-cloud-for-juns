@@ -21,24 +21,27 @@ export class UsersService {
     private repository: Repository<User>,
   ) {}
 
-  async getUsers(): Promise<I_GetData<{ users: T_User[]; count: number }>> {
+  async getUsers(): Promise<
+    I_GetData<{ users: T_User[]; count: number; total: number }>
+  > {
     try {
-      const usersCount = await this.repository.count()
-      const users = await this.repository.find({
-        select: {
-          id: true,
-          email: true,
-          firstName: true,
-          lastName: true,
-          active: true,
-        },
-      })
+      const totalUsers = await this.repository.count()
+      const users = await this.repository
+        .createQueryBuilder('user')
+        .select('user.id')
+        .addSelect('user.email')
+        .addSelect('user.firstName')
+        .addSelect('user.lastName')
+        .addSelect('user.active')
+        .loadRelationCountAndMap('user.tasksCount', 'user.tasks')
+        .getMany()
 
       return {
         message: 'Successfully fetched users',
         data: {
           users,
-          count: usersCount,
+          count: users.length,
+          total: totalUsers,
         },
         timestamp: new Date(),
       }
@@ -58,8 +61,11 @@ export class UsersService {
     await this.checkNotExists('id', userId)
 
     try {
-      const user = await this.repository.findOneBy({
-        id: userId,
+      const user = await this.repository.findOne({
+        where: {
+          id: userId,
+        },
+        relations: ['tasks'],
       })
 
       return {
@@ -71,6 +77,7 @@ export class UsersService {
             firstName: user.firstName,
             lastName: user.lastName,
             active: user.active,
+            tasks: user.tasks,
           },
         },
         timestamp: new Date(),
@@ -109,6 +116,7 @@ export class UsersService {
             firstName: user.firstName,
             lastName: user.lastName,
             active: user.active,
+            tasks: user.tasks,
           },
         },
         timestamp: new Date(),
@@ -148,6 +156,7 @@ export class UsersService {
             firstName: newData.firstName,
             lastName: newData.lastName,
             active: newData.active,
+            tasks: newData.tasks,
           },
         },
         timestamp: new Date(),
