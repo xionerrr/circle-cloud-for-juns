@@ -10,9 +10,8 @@ import * as argon2 from 'argon2'
 import { UserCreateDto, UserUpdateDto } from './dtos'
 import { T_User } from './models'
 
-import { User } from 'src/entities/user.entity'
-import { I_GetData } from 'src/models/app.model'
-import { T_UserFindParam, T_UserFindType } from 'src/models/user.model'
+import { User } from 'src/entities'
+import { I_GetData, T_UserFindParam, T_UserFindType } from 'src/models'
 
 @Injectable()
 export class UsersService {

@@ -7,7 +7,7 @@ import { AuthService } from './auth.service'
 import { TokensService } from './tokens.service'
 import { AccessTokenStrategy, RefreshTokenStrategy } from './strategies'
 
-import { User } from 'src/entities/user.entity'
+import { User } from 'src/entities'
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), JwtModule.register({})],

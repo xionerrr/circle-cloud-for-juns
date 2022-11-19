@@ -9,13 +9,13 @@ import {
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Request } from 'express'
 
 import { AuthService } from './auth.service'
 import { RefreshDto, SignInDto, SignUpDto } from './dtos'
 import { I_Auth, T_AuthRefresh } from './models'
 
-import { I_GetData } from 'src/models/app.model'
-import { Request } from 'express'
+import { I_GetData } from 'src/models'
 
 @Controller('auth')
 @ApiTags('Auth')

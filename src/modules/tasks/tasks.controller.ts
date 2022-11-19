@@ -9,13 +9,13 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger'
-
-import { T_Task } from './models'
-import { TasksService } from './tasks.service'
-
-import { I_GetData } from 'src/models/app.model'
 import { AuthGuard } from '@nestjs/passport'
+
 import { UpdateTaskDto } from './dtos'
+import { TasksService } from './tasks.service'
+import { T_Task } from './models'
+
+import { I_GetData } from 'src/models'
 
 @Controller('users')
 @ApiTags('Tasks')

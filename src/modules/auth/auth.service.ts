@@ -11,8 +11,8 @@ import { RefreshDto, SignInDto, SignUpDto } from './dtos'
 import { TokensService } from './tokens.service'
 import { I_Auth, T_AuthRefresh } from './models'
 
-import { User } from 'src/entities/user.entity'
-import { E_ServerStatus, I_GetData } from 'src/models/app.model'
+import { E_ServerStatus, I_GetData } from 'src/models'
+import { User } from 'src/entities'
 
 @Injectable()
 export class AuthService {

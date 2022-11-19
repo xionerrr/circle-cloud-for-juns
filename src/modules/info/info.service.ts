@@ -2,9 +2,8 @@ import { ForbiddenException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
-import { Task } from 'src/entities/task.entity'
-import { User } from 'src/entities/user.entity'
-import { I_GetData } from 'src/models/app.model'
+import { Task, User } from 'src/entities'
+import { I_GetData } from 'src/models'
 
 @Injectable()
 export class InfoService {

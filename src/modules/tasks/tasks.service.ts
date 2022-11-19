@@ -9,8 +9,8 @@ import { Repository } from 'typeorm'
 import { UpdateTaskDto } from './dtos'
 import { T_Task } from './models'
 
-import { Task } from 'src/entities/task.entity'
-import { I_GetData } from 'src/models/app.model'
+import { I_GetData } from 'src/models'
+import { Task } from 'src/entities'
 
 @Injectable()
 export class TasksService {

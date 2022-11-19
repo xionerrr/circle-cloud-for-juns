@@ -17,7 +17,7 @@ import { UserCreateDto, UserUpdateDto } from './dtos'
 import { UsersService } from './users.service'
 import { T_User } from './models'
 
-import { I_GetData } from 'src/models/app.model'
+import { I_GetData } from 'src/models'
 
 @UseGuards(AuthGuard('jwt'))
 @ApiBearerAuth()

@@ -12,9 +12,8 @@ import { Request } from 'express'
 
 import { InfoService } from './info.service'
 
-import { Task } from 'src/entities/task.entity'
-import { User } from 'src/entities/user.entity'
-import { I_GetData } from 'src/models/app.model'
+import { Task, User } from 'src/entities'
+import { I_GetData } from 'src/models'
 
 @UseGuards(AuthGuard('jwt'))
 @ApiBearerAuth()

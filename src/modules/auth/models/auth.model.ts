@@ -1,4 +1,4 @@
-import { T_Tokens } from 'src/models/auth.model'
+import { T_Tokens } from 'src/models'
 
 export interface I_Auth extends T_Tokens {
   id: number

@@ -6,6 +6,7 @@ import {
   DatabaseModule,
   InfoModule,
   TasksModule,
+  UploadModule,
   UsersModule,
 } from './modules'
 
@@ -17,6 +18,7 @@ import {
     TasksModule,
     UsersModule,
     InfoModule,
+    UploadModule,
   ],
 })
 export class AppModule {}
