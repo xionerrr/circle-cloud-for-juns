@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import * as argon2 from 'argon2'
 
-import { E_ServerStatus, T_Tokens } from 'src/models'
+import { T_Tokens } from 'src/models'
 import { User } from 'src/entities'
 
 @Injectable()
@@ -65,8 +65,8 @@ export class TokensService {
     } catch (error) {
       throw new ForbiddenException({
         message: {
-          text: error.detail,
-          status: E_ServerStatus.FORBIDDEN,
+          text: error.message,
+          status: error.status,
         },
       })
     }

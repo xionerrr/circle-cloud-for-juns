@@ -11,7 +11,7 @@ import { RefreshDto, SignInDto, SignUpDto } from './dtos'
 import { TokensService } from './tokens.service'
 import { I_Auth, T_AuthRefresh } from './models'
 
-import { E_ServerStatus, I_GetData } from 'src/models'
+import { I_GetData } from 'src/models'
 import { User } from 'src/entities'
 
 @Injectable()
@@ -23,8 +23,18 @@ export class AuthService {
   ) {}
 
   async signUp(body: SignUpDto): Promise<I_GetData<I_Auth>> {
-    const user = await this.repository.findOneBy({
-      email: body.email,
+    const user = await this.repository.findOne({
+      where: {
+        email: body.email,
+      },
+      relations: ['avatar'],
+      select: {
+        avatar: {
+          url: true,
+          fileName: true,
+          mimetype: true,
+        },
+      },
     })
 
     if (user)
@@ -53,22 +63,33 @@ export class AuthService {
           firstName: user.firstName,
           lastName: user.lastName,
           active: user.active,
+          avatar: user.avatar,
         },
         timestamp: new Date(),
       }
     } catch (error) {
       throw new ForbiddenException({
         message: {
-          text: error.detail,
-          status: E_ServerStatus.FORBIDDEN,
+          text: error.message,
+          status: error.status,
         },
       })
     }
   }
 
   async signIn(body: SignInDto): Promise<I_GetData<I_Auth>> {
-    const user = await this.repository.findOneBy({
-      email: body.email,
+    const user = await this.repository.findOne({
+      where: {
+        email: body.email,
+      },
+      relations: ['avatar'],
+      select: {
+        avatar: {
+          url: true,
+          fileName: true,
+          mimetype: true,
+        },
+      },
     })
 
     if (!user)
@@ -92,14 +113,15 @@ export class AuthService {
           firstName: user.firstName,
           lastName: user.lastName,
           active: user.active,
+          avatar: user.avatar,
         },
         timestamp: new Date(),
       }
     } catch (error) {
       throw new ForbiddenException({
         message: {
-          text: error.detail,
-          status: E_ServerStatus.FORBIDDEN,
+          text: error.message,
+          status: error.status,
         },
       })
     }
@@ -133,8 +155,8 @@ export class AuthService {
     } catch (error) {
       throw new ForbiddenException({
         message: {
-          text: error.detail,
-          status: E_ServerStatus.FORBIDDEN,
+          text: error.message,
+          status: error.status,
         },
       })
     }

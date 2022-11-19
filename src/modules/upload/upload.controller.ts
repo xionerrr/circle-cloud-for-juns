@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   UploadedFile,
   UseGuards,
@@ -60,13 +61,10 @@ export class UploadController {
       fieldName: 'file',
       path: '',
       fileFilter: (_, file, callback) => {
-        if (!file.mimetype.includes('image')) {
-          return callback(new BadRequestException('Incorrect file type'), false)
-        }
         callback(null, true)
       },
       limits: {
-        fileSize: 2048 ** 2,
+        fileSize: 2048 ** 2, // 4MB
       },
     }),
   )
@@ -74,7 +72,7 @@ export class UploadController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<I_GetData<File>> {
     return this.uploadService.uploadFile({
-      url: '/uploads/' + file.filename,
+      url: file.filename,
       fileName: file.originalname,
       mimetype: file.mimetype,
     })
@@ -92,6 +90,20 @@ export class UploadController {
   })
   downloadFile(@Param('fileId') fileId: string) {
     return this.uploadService.downloadFile(Number(fileId))
+  }
+
+  @Patch('files/:fileId')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'File updated',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+  })
+  updateFile(@Param('fileId') fileId: string) {
+    return this.uploadService.updateFile(Number(fileId))
   }
 
   @Delete('files/:fileId')

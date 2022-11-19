@@ -25,15 +25,21 @@ export class UsersService {
   > {
     try {
       const totalUsers = await this.repository.count()
-      const users = await this.repository
-        .createQueryBuilder('user')
-        .select('user.id')
-        .addSelect('user.email')
-        .addSelect('user.firstName')
-        .addSelect('user.lastName')
-        .addSelect('user.active')
-        .loadRelationCountAndMap('user.tasksCount', 'user.tasks')
-        .getMany()
+      const users = await this.repository.find({
+        relations: ['avatar'],
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          active: true,
+          avatar: {
+            url: true,
+            fileName: true,
+            mimetype: true,
+          },
+        },
+      })
 
       return {
         message: 'Successfully fetched users',
@@ -64,7 +70,14 @@ export class UsersService {
         where: {
           id: userId,
         },
-        relations: ['tasks'],
+        relations: ['tasks', 'avatar'],
+        select: {
+          avatar: {
+            url: true,
+            fileName: true,
+            mimetype: true,
+          },
+        },
       })
 
       return {
@@ -76,8 +89,8 @@ export class UsersService {
             firstName: user.firstName,
             lastName: user.lastName,
             active: user.active,
-            tasks: user.tasks,
             avatar: user.avatar,
+            tasks: user.tasks,
           },
         },
         timestamp: new Date(),

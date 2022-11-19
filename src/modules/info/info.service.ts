@@ -20,6 +20,7 @@ export class InfoService {
         where: {
           id: userId,
         },
+        relations: ['avatar'],
         select: {
           id: true,
           email: true,
@@ -27,6 +28,11 @@ export class InfoService {
           lastName: true,
           active: true,
           updatedAt: true,
+          avatar: {
+            url: true,
+            fileName: true,
+            mimetype: true,
+          },
         },
       })
 

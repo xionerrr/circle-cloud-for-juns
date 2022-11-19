@@ -13,6 +13,7 @@ import {
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+
     AuthModule,
     DatabaseModule,
     TasksModule,
