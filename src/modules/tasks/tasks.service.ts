@@ -1,11 +1,16 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
+import { UpdateTaskDto } from './dtos'
 import { T_Task } from './models'
 
 import { Task } from 'src/entities/task.entity'
-import { E_ServerStatus, I_GetData } from 'src/models/app.model'
+import { I_GetData } from 'src/models/app.model'
 
 @Injectable()
 export class TasksService {
@@ -37,8 +42,81 @@ export class TasksService {
     } catch (error) {
       throw new ForbiddenException({
         message: {
-          text: error.detail,
-          status: E_ServerStatus.FORBIDDEN,
+          text: error.message,
+          status: error.status,
+        },
+      })
+    }
+  }
+
+  async getTask(
+    userId: number,
+    taskId: number,
+  ): Promise<I_GetData<{ task: T_Task }>> {
+    try {
+      const task = await this.repository.findOne({
+        where: {
+          id: taskId,
+          creator: {
+            id: userId,
+          },
+        },
+      })
+
+      if (!task) throw new NotFoundException(`Task with id ${taskId} not found`)
+
+      return {
+        message: 'Successfully fetched task',
+        data: {
+          task,
+        },
+        timestamp: new Date(),
+      }
+    } catch (error) {
+      throw new ForbiddenException({
+        message: {
+          text: error.message,
+          status: error.status,
+        },
+      })
+    }
+  }
+
+  async updateTask(
+    userId: number,
+    taskId: number,
+    body: UpdateTaskDto,
+  ): Promise<I_GetData<{ task: T_Task }>> {
+    try {
+      const taskExists = await this.repository.findOne({
+        where: {
+          id: taskId,
+          creator: {
+            id: userId,
+          },
+        },
+      })
+
+      if (!taskExists)
+        throw new NotFoundException(`Task with id ${taskId} not found`)
+
+      const task = await this.repository.save({
+        ...taskExists,
+        ...body,
+      })
+
+      return {
+        message: 'Successfully updated task',
+        data: {
+          task,
+        },
+        timestamp: new Date(),
+      }
+    } catch (error) {
+      throw new ForbiddenException({
+        message: {
+          text: error.message,
+          status: error.status,
         },
       })
     }

@@ -9,7 +9,7 @@ import {
 
 import { User } from './user.entity'
 
-import { T_TaskId } from 'src/models/task.model'
+import { E_TaskPriority, T_TaskId } from 'src/models/task.model'
 
 @Entity({
   name: 'tasks',
@@ -24,8 +24,11 @@ export class Task {
   @Column()
   description: string
 
-  @Column({ default: 'firstly' })
-  priority: string
+  @Column({
+    type: 'simple-enum',
+    default: E_TaskPriority.firstly,
+  })
+  priority: E_TaskPriority
 
   @ManyToOne(() => User, (user) => user.tasks)
   creator: User

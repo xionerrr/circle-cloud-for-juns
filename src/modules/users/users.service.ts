@@ -7,11 +7,11 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import * as argon2 from 'argon2'
 
-import { UserCreateDto, UserUpdateDto } from './dto'
+import { UserCreateDto, UserUpdateDto } from './dtos'
 import { T_User } from './models'
 
 import { User } from 'src/entities/user.entity'
-import { E_ServerStatus, I_GetData } from 'src/models/app.model'
+import { I_GetData } from 'src/models/app.model'
 import { T_UserFindParam, T_UserFindType } from 'src/models/user.model'
 
 @Injectable()
@@ -48,8 +48,8 @@ export class UsersService {
     } catch (error) {
       throw new ForbiddenException({
         message: {
-          text: error.detail,
-          status: E_ServerStatus.FORBIDDEN,
+          text: error.message,
+          status: error.status,
         },
       })
     }
@@ -85,8 +85,8 @@ export class UsersService {
     } catch (error) {
       throw new ForbiddenException({
         message: {
-          text: error.detail,
-          status: E_ServerStatus.FORBIDDEN,
+          text: error.message,
+          status: error.status,
         },
       })
     }
@@ -124,8 +124,8 @@ export class UsersService {
     } catch (error) {
       throw new ForbiddenException({
         message: {
-          text: error.detail,
-          status: E_ServerStatus.FORBIDDEN,
+          text: error.message,
+          status: error.status,
         },
       })
     }
@@ -164,8 +164,8 @@ export class UsersService {
     } catch (error) {
       throw new ForbiddenException({
         message: {
-          text: error.detail,
-          status: E_ServerStatus.FORBIDDEN,
+          text: error.message,
+          status: error.status,
         },
       })
     }
@@ -184,8 +184,8 @@ export class UsersService {
     } catch (error) {
       throw new ForbiddenException({
         message: {
-          text: error.detail,
-          status: E_ServerStatus.FORBIDDEN,
+          text: error.message,
+          status: error.status,
         },
       })
     }

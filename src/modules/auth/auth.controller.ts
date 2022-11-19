@@ -11,7 +11,7 @@ import { AuthGuard } from '@nestjs/passport'
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 import { AuthService } from './auth.service'
-import { RefreshDto, SignInDto, SignUpDto } from './dto'
+import { RefreshDto, SignInDto, SignUpDto } from './dtos'
 import { I_Auth, T_AuthRefresh } from './models'
 
 import { I_GetData } from 'src/models/app.model'

@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import * as argon2 from 'argon2'
 
-import { RefreshDto, SignInDto, SignUpDto } from './dto'
+import { RefreshDto, SignInDto, SignUpDto } from './dtos'
 import { TokensService } from './tokens.service'
 import { I_Auth, T_AuthRefresh } from './models'
 
