@@ -11,4 +11,11 @@ export class UserUpdateDto {
   @IsOptional()
   @IsString()
   lastName: string
+
+  @ApiProperty({
+    example: '/uploads/somePage.jpg',
+  })
+  @IsOptional()
+  @IsString()
+  url: string
 }

@@ -71,7 +71,9 @@ export class UsersController {
   })
   createUser(
     @Body() body: UserCreateDto,
-  ): Promise<I_GetData<{ user: Omit<T_User, 'createdAt' | 'updatedAt'> }>> {
+  ): Promise<
+    I_GetData<{ user: Omit<T_User, 'createdAt' | 'updatedAt' | 'tasks'> }>
+  > {
     return this.usersService.createUser(body)
   }
 
@@ -88,7 +90,9 @@ export class UsersController {
   updateUser(
     @Param('userId') userId: string,
     @Body() body: UserUpdateDto,
-  ): Promise<I_GetData<{ user: Omit<T_User, 'createdAt' | 'updatedAt'> }>> {
+  ): Promise<
+    I_GetData<{ user: Omit<T_User, 'createdAt' | 'updatedAt' | 'tasks'> }>
+  > {
     return this.usersService.updateUser(Number(userId), body)
   }
 

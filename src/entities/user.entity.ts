@@ -5,12 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  OneToOne,
-  JoinColumn,
 } from 'typeorm'
 
 import { Task } from './task.entity'
-import { File } from './file.entity'
 
 import { E_Roles, T_UserId } from 'src/models'
 
@@ -41,15 +38,14 @@ export class User {
   })
   active: boolean
 
+  @Column({ nullable: true })
+  avatar: string
+
   @Column({
     type: 'simple-enum',
     default: E_Roles.user,
   })
   role: E_Roles
-
-  @OneToOne(() => File)
-  @JoinColumn()
-  avatar: File
 
   @OneToMany(() => Task, (task) => task.creator)
   tasks: Task[]

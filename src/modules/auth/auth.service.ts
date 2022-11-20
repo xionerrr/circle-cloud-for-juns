@@ -27,14 +27,6 @@ export class AuthService {
       where: {
         email: body.email,
       },
-      relations: ['avatar'],
-      select: {
-        avatar: {
-          url: true,
-          fileName: true,
-          mimetype: true,
-        },
-      },
     })
 
     if (user)
@@ -82,14 +74,6 @@ export class AuthService {
     const user = await this.repository.findOne({
       where: {
         email: body.email,
-      },
-      relations: ['avatar'],
-      select: {
-        avatar: {
-          url: true,
-          fileName: true,
-          mimetype: true,
-        },
       },
     })
 

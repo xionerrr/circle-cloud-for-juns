@@ -72,6 +72,8 @@ export class UploadController {
   uploadFile(
     @UploadedFile() file: Express.Multer.File,
   ): Promise<I_GetData<File>> {
+    if (!file) throw new BadRequestException('It should be a file')
+
     return this.uploadService.uploadFile({
       url: `/uploads/${file.filename}`,
       fileName: file.originalname,

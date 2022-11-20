@@ -1,4 +1,3 @@
-import { File } from 'src/entities'
 import { E_Roles, T_Tokens } from 'src/models'
 
 export interface I_Auth extends T_Tokens {
@@ -7,7 +6,7 @@ export interface I_Auth extends T_Tokens {
   firstName: string
   lastName: string
   active: boolean
-  avatar: Omit<File, 'id'>
+  avatar: string
   role: E_Roles
 }
 

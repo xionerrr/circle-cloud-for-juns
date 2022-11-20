@@ -26,18 +26,13 @@ export class UsersService {
     try {
       const totalUsers = await this.repository.count()
       const users = await this.repository.find({
-        relations: ['avatar'],
         select: {
           id: true,
           email: true,
           firstName: true,
           lastName: true,
           active: true,
-          avatar: {
-            url: true,
-            fileName: true,
-            mimetype: true,
-          },
+          avatar: true,
         },
       })
 
@@ -70,14 +65,6 @@ export class UsersService {
         where: {
           id: userId,
         },
-        relations: ['tasks', 'avatar'],
-        select: {
-          avatar: {
-            url: true,
-            fileName: true,
-            mimetype: true,
-          },
-        },
       })
 
       return {
@@ -89,8 +76,8 @@ export class UsersService {
             firstName: user.firstName,
             lastName: user.lastName,
             active: user.active,
-            avatar: user.avatar,
             tasks: user.tasks,
+            avatar: user.avatar,
             role: user.role,
           },
         },
@@ -108,7 +95,9 @@ export class UsersService {
 
   async createUser(
     body: UserCreateDto,
-  ): Promise<I_GetData<{ user: Omit<T_User, 'createdAt' | 'updatedAt'> }>> {
+  ): Promise<
+    I_GetData<{ user: Omit<T_User, 'createdAt' | 'updatedAt' | 'tasks'> }>
+  > {
     await this.checkExists('email', body.email)
 
     const { password, ...data } = body
@@ -130,7 +119,6 @@ export class UsersService {
             firstName: user.firstName,
             lastName: user.lastName,
             active: user.active,
-            tasks: user.tasks,
             avatar: user.avatar,
             role: user.role,
           },
@@ -150,7 +138,9 @@ export class UsersService {
   async updateUser(
     userId: number,
     body: UserUpdateDto,
-  ): Promise<I_GetData<{ user: Omit<T_User, 'createdAt' | 'updatedAt'> }>> {
+  ): Promise<
+    I_GetData<{ user: Omit<T_User, 'createdAt' | 'updatedAt' | 'tasks'> }>
+  > {
     await this.checkNotExists('id', userId)
 
     try {
@@ -172,7 +162,6 @@ export class UsersService {
             firstName: newData.firstName,
             lastName: newData.lastName,
             active: newData.active,
-            tasks: newData.tasks,
             avatar: newData.avatar,
             role: newData.role,
           },
