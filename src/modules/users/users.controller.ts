@@ -17,9 +17,10 @@ import { UserCreateDto, UserUpdateDto } from './dtos'
 import { UsersService } from './users.service'
 import { T_User } from './models'
 
-import { I_GetData } from 'src/models'
+import { E_Roles, I_GetData } from 'src/models'
+import { RolesGuard } from 'src/guards'
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'), RolesGuard([E_Roles.admin]))
 @ApiBearerAuth()
 @Controller('users')
 @ApiTags('Users')

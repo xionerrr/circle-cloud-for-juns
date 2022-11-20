@@ -12,7 +12,7 @@ import {
 import { Task } from './task.entity'
 import { File } from './file.entity'
 
-import { T_UserId } from 'src/models'
+import { E_Roles, T_UserId } from 'src/models'
 
 @Entity({
   name: 'users',
@@ -40,6 +40,12 @@ export class User {
     default: true,
   })
   active: boolean
+
+  @Column({
+    type: 'simple-enum',
+    default: E_Roles.user,
+  })
+  role: E_Roles
 
   @OneToOne(() => File)
   @JoinColumn()

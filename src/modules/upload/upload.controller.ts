@@ -25,9 +25,10 @@ import { UploadService } from './upload.service'
 
 import { File } from 'src/entities'
 import { FilesInterceptor } from 'src/interceptors'
-import { I_GetData } from 'src/models'
+import { E_Roles, I_GetData } from 'src/models'
+import { RolesGuard } from 'src/guards'
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'), RolesGuard([E_Roles.admin]))
 @ApiBearerAuth()
 @Controller('upload')
 @ApiTags('Upload')
@@ -72,7 +73,7 @@ export class UploadController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<I_GetData<File>> {
     return this.uploadService.uploadFile({
-      url: file.filename,
+      url: `/uploads/${file.filename}`,
       fileName: file.originalname,
       mimetype: file.mimetype,
     })

@@ -15,8 +15,11 @@ import { UpdateTaskDto } from './dtos'
 import { TasksService } from './tasks.service'
 import { T_Task } from './models'
 
-import { I_GetData } from 'src/models'
+import { E_Roles, I_GetData } from 'src/models'
+import { RolesGuard } from 'src/guards'
 
+@UseGuards(AuthGuard('jwt'), RolesGuard([E_Roles.admin]))
+@ApiBearerAuth()
 @Controller('users')
 @ApiTags('Tasks')
 export class TasksController {
@@ -55,8 +58,6 @@ export class TasksController {
     return this.tasksService.getTask(Number(userId), Number(taskId))
   }
 
-  @UseGuards(AuthGuard('jwt'))
-  @ApiBearerAuth()
   @Put(':userId/tasks/:taskId')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({

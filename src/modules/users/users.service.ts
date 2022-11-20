@@ -91,6 +91,7 @@ export class UsersService {
             active: user.active,
             avatar: user.avatar,
             tasks: user.tasks,
+            role: user.role,
           },
         },
         timestamp: new Date(),
@@ -131,6 +132,7 @@ export class UsersService {
             active: user.active,
             tasks: user.tasks,
             avatar: user.avatar,
+            role: user.role,
           },
         },
         timestamp: new Date(),
@@ -172,6 +174,7 @@ export class UsersService {
             active: newData.active,
             tasks: newData.tasks,
             avatar: newData.avatar,
+            role: newData.role,
           },
         },
         timestamp: new Date(),
@@ -204,6 +207,12 @@ export class UsersService {
         },
       })
     }
+  }
+
+  async findOneBy(userId: number): Promise<User> {
+    return await this.repository.findOneBy({
+      id: userId,
+    })
   }
 
   async checkNotExists(type: T_UserFindType, param: T_UserFindParam) {
