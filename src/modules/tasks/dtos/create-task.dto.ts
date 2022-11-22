@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsEnum, IsOptional, IsString } from 'class-validator'
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
-import { E_TaskPriority } from 'src/models/task.model'
+import { E_TaskPriority } from 'src/models'
 
-export class UpdateTaskDto {
-  @ApiProperty({ example: 'New title' })
-  @IsOptional()
+export class CreateTaskDto {
+  @ApiProperty({ example: 'Title' })
+  @IsNotEmpty()
   @IsString()
   title: string
 
-  @ApiProperty({ example: 'New description' })
+  @ApiProperty({ example: 'Description' })
   @IsOptional()
   @IsString()
   description: string

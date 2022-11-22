@@ -5,13 +5,14 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Post,
   Put,
   UseGuards,
 } from '@nestjs/common'
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { AuthGuard } from '@nestjs/passport'
 
-import { UpdateTaskDto } from './dtos'
+import { CreateTaskDto, UpdateTaskDto } from './dtos'
 import { TasksService } from './tasks.service'
 import { T_Task } from './models'
 
@@ -74,5 +75,22 @@ export class TasksController {
     @Body() body: UpdateTaskDto,
   ): Promise<I_GetData<{ task: T_Task }>> {
     return this.tasksService.updateTask(Number(userId), Number(taskId), body)
+  }
+
+  @Post(':userId/tasks')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Task created successfully',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+  })
+  createTask(
+    @Param('userId') userId: string,
+    @Body() body: CreateTaskDto,
+  ): Promise<I_GetData<{ task: Omit<T_Task, 'updatedAt' | 'creator'> }>> {
+    return this.tasksService.createTask(Number(userId), body)
   }
 }

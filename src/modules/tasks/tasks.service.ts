@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
-import { UpdateTaskDto } from './dtos'
+import { CreateTaskDto, UpdateTaskDto } from './dtos'
 import { T_Task } from './models'
 
 import { I_GetData } from 'src/models'
@@ -109,6 +109,43 @@ export class TasksService {
         message: 'Successfully updated task',
         data: {
           task,
+        },
+        timestamp: new Date(),
+      }
+    } catch (error) {
+      throw new ForbiddenException({
+        message: {
+          text: error.message,
+          status: error.status,
+        },
+      })
+    }
+  }
+
+  async createTask(
+    userId: number,
+    body: CreateTaskDto,
+  ): Promise<I_GetData<{ task: Omit<T_Task, 'updatedAt' | 'creator'> }>> {
+    try {
+      const newTask = await this.repository.create({
+        creator: {
+          id: userId,
+        },
+        ...body,
+      })
+
+      const task = await this.repository.save(newTask)
+
+      return {
+        message: 'Successfully created task',
+        data: {
+          task: {
+            id: task.id,
+            title: task.title,
+            description: task.description,
+            priority: task.priority,
+            createdAt: task.createdAt,
+          },
         },
         timestamp: new Date(),
       }
