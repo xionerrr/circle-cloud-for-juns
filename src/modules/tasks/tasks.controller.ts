@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -92,5 +93,22 @@ export class TasksController {
     @Body() body: CreateTaskDto,
   ): Promise<I_GetData<{ task: Omit<T_Task, 'updatedAt' | 'creator'> }>> {
     return this.tasksService.createTask(Number(userId), body)
+  }
+
+  @Delete(':userId/tasks/:taskId')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Task deleted successfully',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden',
+  })
+  deleteTask(
+    @Param('userId') userId: string,
+    @Param('taskId') taskId: string,
+  ): Promise<Omit<I_GetData<unknown>, 'data'>> {
+    return this.tasksService.deleteTask(Number(userId), Number(taskId))
   }
 }

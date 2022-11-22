@@ -4,6 +4,7 @@ import { Repository } from 'typeorm'
 
 import { Task, User } from 'src/entities'
 import { I_GetData } from 'src/models'
+import { CreateMyTaskDto } from './dtos'
 
 @Injectable()
 export class InfoService {
@@ -59,6 +60,43 @@ export class InfoService {
       return {
         message: 'Successfully fetched my tasks',
         data: tasks,
+        timestamp: new Date(),
+      }
+    } catch (error) {
+      throw new ForbiddenException({
+        message: {
+          text: error.message,
+          status: error.status,
+        },
+      })
+    }
+  }
+
+  async createMyTask(
+    userId: number,
+    body: CreateMyTaskDto,
+  ): Promise<I_GetData<{ task: Omit<Task, 'updatedAt' | 'creator'> }>> {
+    try {
+      const newTask = await this.taskRepository.create({
+        creator: {
+          id: userId,
+        },
+        ...body,
+      })
+
+      const task = await this.taskRepository.save(newTask)
+
+      return {
+        message: 'Successfully created my task',
+        data: {
+          task: {
+            id: task.id,
+            title: task.title,
+            description: task.description,
+            priority: task.priority,
+            createdAt: task.createdAt,
+          },
+        },
         timestamp: new Date(),
       }
     } catch (error) {

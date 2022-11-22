@@ -158,4 +158,44 @@ export class TasksService {
       })
     }
   }
+
+  async deleteTask(
+    userId: number,
+    taskId: number,
+  ): Promise<Omit<I_GetData<unknown>, 'data'>> {
+    try {
+      const task = await this.repository.findOne({
+        where: {
+          id: taskId,
+          creator: {
+            id: userId,
+          },
+        },
+      })
+
+      if (!task)
+        throw new NotFoundException(
+          `Task with id: ${taskId} in user: ${userId} not found`,
+        )
+
+      await this.repository.delete({
+        id: taskId,
+        creator: {
+          id: userId,
+        },
+      })
+
+      return {
+        message: `Successfully deleted task with id: ${taskId}`,
+        timestamp: new Date(),
+      }
+    } catch (error) {
+      throw new ForbiddenException({
+        message: {
+          text: error.message,
+          status: error.status,
+        },
+      })
+    }
+  }
 }
